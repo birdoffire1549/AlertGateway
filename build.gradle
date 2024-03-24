@@ -1,0 +1,39 @@
+// **** This build.gradle file was built to be used with gradle version 8.x ****
+// **** Author: Scott Griffis                                               ****
+// **** Date: 3/20/2024                                                     ****
+
+plugins {
+    id 'org.springframework.boot' version '2.7.8' // A working application connot be built without this.
+    id 'eclipse'
+    id 'java-library'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+version = '1.0.0'
+
+sourceSets {
+    main {
+        java.srcDirs = ['src/main/java']
+        resources.srcDirs = ['src/main/resources']
+    }
+    
+    test {
+        java.srcDirs = ['src/test/java']
+        resources.srcDirs = ['src/test/resources']
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.7.8'
+    implementation 'com.sun.mail:javax.mail:+'
+    
+}
