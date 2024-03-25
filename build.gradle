@@ -6,6 +6,7 @@ plugins {
     id 'org.springframework.boot' version '2.7.8' // A working application connot be built without this.
     id 'eclipse'
     id 'java-library'
+    id "com.netflix.nebula.ospackage" version "11.8.1"
 }
 
 java {
@@ -14,7 +15,10 @@ java {
     }
 }
 
-version = '1.0.0'
+Properties props = new Properties()
+props.load(new FileInputStream("src/main/resources/version.properties"))
+def appVersion =  props.get('appVersion') // App Version should only be modified in the version.properties file mentioned above.
+version = appVersion
 
 sourceSets {
     main {
@@ -36,4 +40,61 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web:2.7.8'
     implementation 'com.sun.mail:javax.mail:+'
     
+    testImplementation 'junit:junit:4.12' // Used by JUnit tests
+}
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'AlertGateway',
+                   'Implementation-Version': version,
+                   'Implementation-Vendor': 'FirebirdCSS',
+                   'Build-Date': (new Date()).format('MM-dd-yyyy HH:mm:ss'),
+                   'Main-Class': 'com.firebirdcss.service.alert_gateway.ApplicationMain'
+    }
+    
+    archiveBaseName = 'alert-gateway'
+}
+
+bootJar {
+    bootJar.archiveFileName = 'alert-gateway.jar'
+}
+
+task myRpm(dependsOn: build, type: Rpm) {
+    packageName 'alert-gateway'
+    version appVersion
+    release '1'
+    arch I386
+    os LINUX
+    
+    requires('java', '17.0', GREATER | EQUAL)
+    
+    preInstall file('scripts/rpm/preInstall.sh')
+    postInstall file('scripts/rpm/postInstall.sh')
+    preUninstall ('scripts/rpm/preRemove.sh')
+    postUninstall ('scripts/rpm/cleanup.sh')
+    
+    directory("/opt/alert_gateway", 0750)
+    directory("/opt/alert_gateway/data", 0750)
+    directory("/opt/alert_gateway/config", 0750)
+    directory("/opt/alert_gateway/bin", 0750)
+    
+    into '/opt/alert_gateway'
+    
+    from(bootJar.outputs.files) {
+        into 'bin'
+    }
+    
+    from('src/main/resources') {
+        fileType CONFIG | NOREPLACE
+        exclude 'version.properties'
+        into 'config'
+    }
+    
+    from('scripts/rpm') {
+        include 'alert-gateway.service'
+        into '/usr/lib/systemd/system'
+        addParentDirs false
+        user 'root'
+        fileMode 0644
+    }
 }
