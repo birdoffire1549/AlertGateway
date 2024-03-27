@@ -153,13 +153,13 @@ publishing {
     publications {
         deb(MavenPublication) {
             groupId = 'com.firebirdcss.service'
-            artifactId = "alert-gateway"
+            artifactId = "alert-gateway-deb"
             artifact "build/distributions/alert-gateway_${version}-1_all.deb"
         }
         
         rpm(MavenPublication) {
             groupId = 'com.firebirdcss.service'
-            artifactId = "alert-gateway"
+            artifactId = "alert-gateway-rpm"
             artifact "build/distributions/alert-gateway-${version}-1.i386.rpm"
         }
         
