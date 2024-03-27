@@ -150,25 +150,15 @@ task myRpm(dependsOn: build, type: Rpm) {
 }
 
 publishing {
-    configurations {
-        conf
-    }
-
-    def rpmFile = layout.buildDirectory.file('alert-gateway-${appVersion}-1.i386.rpm')
-    def rpmArtifact = artifacts.add('conf', rpmFile.get().asFile) {
-        type 'rpm'
-        builtBy 'rpm'
-    }
-    
-    def debFile = layout.buildDirectory.file('alert-gateway_${appVersion}-1_all.deb')
-    def debArtifact = artifacts.add('conf', debFile.get().asFile) {
-        type 'deb'
-        builtBy 'deb'
-    }
-    
     publications {
-        maven(MavenPublication) {
-            artifact rpmArtifact
+        deb(MavenPublication) {
+            artifactId = "alert-gateway"
+            artifact "build/distributions/alert-gateway_${appVersion}-1_all.deb"
+        }
+        
+        rpm(MavenPublication) {
+            artifactId = "alert-gateway"
+            artifact "build/distributions/alert-gateway-${appVerion}-1.i386.rpm"
         }
         
         maven(MavenPublication) {
