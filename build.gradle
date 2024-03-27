@@ -149,7 +149,7 @@ task myRpm(dependsOn: build, type: Rpm) {
     }
 }
 
-publishing {
+publish {
     publications {
         maven(MavenPublication) {
             groupId = 'com.firebirdcss.service'
