@@ -150,6 +150,7 @@ task myRpm(dependsOn: build, type: Rpm) {
 }
 
 publishing {
+    /*
     configurations {
         conf
     }
@@ -165,8 +166,9 @@ publishing {
         type 'deb'
         builtBy 'deb'
     }
-
+    */
     publications {
+        /*
         maven(MavenPublication) {
             artifact rpmArtifact
         }
@@ -174,7 +176,7 @@ publishing {
         maven(MavenPublication) {
             artifact debArtifact
         }
-        
+        */
         maven(MavenPublication) {
             groupId = 'com.firebirdcss.service'
             artifactId = 'alert-gateway'
