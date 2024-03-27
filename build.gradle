@@ -162,10 +162,6 @@ publishing {
         }
         
         maven(MavenPublication) {
-            artifact debArtifact
-        }
-        
-        maven(MavenPublication) {
             groupId = 'com.firebirdcss.service'
             artifactId = 'alert-gateway'
             
