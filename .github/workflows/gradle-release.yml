@@ -15,7 +15,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       packages: write
 
     steps:
@@ -34,15 +34,12 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build myDeb myRpm
       
-    - name: Release DEB Package
-      uses: softprops/action-gh-release@v1
+    - name: Release DEB and RPM Package
+      uses: softprops/action-gh-release@v2
       with:
-        files: build/distributions/*.deb
-        
-    - name: Release RPM Package
-      uses: softprops/action-gh-release@v1
-      with:
-        files: build/distributions/*.rpm
+        files: |
+          build/distributions/*.deb
+          build/distributions/*.rpm
 
     # The USERNAME and TOKEN need to correspond to the credentials environment variables used in
     # the publishing section of your build.gradle
