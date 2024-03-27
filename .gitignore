@@ -1,5 +1,6 @@
 .*
 !.gitignore
+!.github
 !.env
 ehthumbs.db
 Thumbs.db
