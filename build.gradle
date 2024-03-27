@@ -153,12 +153,12 @@ publishing {
     publications {
         deb(MavenPublication) {
             artifactId = "alert-gateway"
-            artifact "build/distributions/alert-gateway_${appVersion}-1_all.deb"
+            artifact "build/distributions/alert-gateway_${version}-1_all.deb"
         }
         
         rpm(MavenPublication) {
             artifactId = "alert-gateway"
-            artifact "build/distributions/alert-gateway-${appVerion}-1.i386.rpm"
+            artifact "build/distributions/alert-gateway-${version}-1.i386.rpm"
         }
         
         maven(MavenPublication) {
