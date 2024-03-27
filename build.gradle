@@ -149,6 +149,11 @@ task myRpm(dependsOn: build, type: Rpm) {
     }
 }
 
+/*
+    NOTE: I am not using the below publishing task in the repo but I plan to
+    leave it here as is because it took quite a bit of research and trial-and-error
+    to get it right and I might want to reference it later for some other project.
+*/
 publishing {
     publications {
         deb(MavenPublication) {
