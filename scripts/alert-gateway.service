@@ -1,0 +1,13 @@
+[Unit]
+Description=Alert Gateway
+
+[Service]
+Type=simple
+User=alert-gateway
+WorkingDirectory=/opt/alert_gateway/
+ExecStart=/usr/bin/java -jar /opt/alert_gateway/bin/alert-gateway.jar
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
