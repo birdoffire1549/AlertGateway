@@ -38,7 +38,10 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web:2.7.8'
+    implementation ('org.springframework.boot:spring-boot-starter-web:2.7.8') {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    }
+    implementation 'org.springframework.boot:spring-boot-starter-log4j:1.3.8.RELEASE'
     implementation 'com.sun.mail:javax.mail:1.6.2'
     
     testImplementation 'junit:junit:4.12' // Used by JUnit tests
@@ -53,10 +56,14 @@ jar {
                    'Main-Class': 'com.firebirdcss.service.alert_gateway.ApplicationMain'
     }
     
+    exclude('application.properties')
+    
     archiveBaseName = 'alert-gateway'
 }
 
 bootJar {
+    exclude('application.properties')
+    
     bootJar.archiveFileName = 'alert-gateway.jar'
 }
 
@@ -84,21 +91,23 @@ task myDeb(dependsOn: build, type: Deb) {
     
     requires('java-runtime-headless', '17', GREATER | EQUAL)
     
-    directory("/opt/alert_gateway", 0330)
-    directory("/opt/alert_gateway/data", 0330)
-    directory("/opt/alert_gateway/config", 0110)
-    directory("/opt/alert_gateway/bin", 0660)
+    directory("/opt/alert_gateway", 0550)
+    directory("/opt/alert_gateway/data", 0660)
+    directory("/opt/alert_gateway/config", 0440)
+    directory("/opt/alert_gateway/bin", 0550)
+    directory("/opt/alert_gateway/logs", 0550)
     
     from(bootJar.outputs.files) {
-        into '/opt/alert_gateway/bin'
-        fileMode 0660
+        into '/opt/alert_gateway'
+        fileMode 0550
     }
     
     from('src/main/resources') {
         fileType CONFIG | NOREPLACE
         exclude 'version.properties'
+        exclude 'log4j.properties'
         into '/opt/alert_gateway/config'
-        fileMode 0110
+        fileMode 0440
     }
     
     from('scripts/alert-gateway.service') {
@@ -122,23 +131,25 @@ task myRpm(dependsOn: build, type: Rpm) {
     postInstall file('scripts/postInstall.sh')
     preUninstall file('scripts/preRemove.sh')
     
-    directory("/opt/alert_gateway", 0330)
-    directory("/opt/alert_gateway/data", 0330)
-    directory("/opt/alert_gateway/config", 0110)
-    directory("/opt/alert_gateway/bin", 0660)
+    directory("/opt/alert_gateway", 0550)
+    directory("/opt/alert_gateway/data", 0660)
+    directory("/opt/alert_gateway/config", 0440)
+    directory("/opt/alert_gateway/bin", 0550)
+    directory("/opt/alert_gateway/logs", 0550)
     
     into '/opt/alert_gateway'
     
     from(bootJar.outputs.files) {
-        into 'bin'
-        fileMode 0660
+        into '/opt/alert_gateway'
+        fileMode 0550
     }
     
     from('src/main/resources') {
         fileType CONFIG | NOREPLACE
         exclude 'version.properties'
+        exclude 'log4j.properties'
         into 'config'
-        fileMode 0110
+        fileMode 0440
     }
     
     from('scripts/alert-gateway.service') {

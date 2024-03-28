@@ -18,8 +18,8 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import com.firebirdcss.service.alert_gateway.data.Settings;
 import com.firebirdcss.service.alert_gateway.endpoints.enums.MessageSeverity;
@@ -131,7 +131,7 @@ public class Notifier extends Service {
             log.info("An Alert was added to the alertQueue.");
             alertQueue.add(alert);
         } else {
-            log.warn("An invalid alert was discarded."); // FIXME: Add alert details...
+            log.warn("An invalid alert was discarded."); // TODO: Add alert details...
         }
     }
     
@@ -149,7 +149,7 @@ public class Notifier extends Service {
         try {
             subManager.update(subscription);
         } catch (SubscriptionManagementException e) {
-            // FIXME: Alert to Admin!? but also toss upstream incase invoker is interested in it.
+            // TODO: Alert to Admin!? but also toss upstream incase invoker is interested in it.
             log.fatal("Unable to persist subscriptions to disk; See stacktrace for more:", e);
             
             throw e; // toss upstream so user can be notified
