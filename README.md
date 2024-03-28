@@ -29,7 +29,7 @@ Finally start the service by using:
 The application will generate logs in the '/opt/alert_gateway/logs' directory under the filename 'application.log'. The logs are setup to roll-over daily and delete from the system after 7 days. 
 
 ## AlertGateway API
-###Overview
+### Overview
 
 | Endpoint | Method | Description | 
 | ---- | ---- | ---- |
@@ -38,10 +38,10 @@ The application will generate logs in the '/opt/alert_gateway/logs' directory un
 | /alert/subscriptions | GET | Used to query subscriptions |
 | /alert/subscriptions | POST | Used to Create/Modify/Delete subscriptions |
 
-###API: '/' Root/Default Endpoint
+### API: '/' Root/Default Endpoint
 The root path of the API will respond to a GET request with a HTML formatted text. The page returned is basically a Welcome Page with some basic information about the Service that is running on that port. Currently it responds with the name of the service: 'Alert Gateway' and the version of the service that is running. In future releases more information about the service, server or API may appear here.
 
-###API: '/alert' Endpoint
+### API: '/alert' Endpoint
 **POST MEHTOD:**
 This endpoint responds to the POST method and expects a JSON format known to this application as an Alert JSON.
 
