@@ -42,7 +42,7 @@ The application will generate logs in the '/opt/alert_gateway/logs' directory un
 The root path of the API will respond to a GET request with a HTML formatted text. The page returned is basically a Welcome Page with some basic information about the Service that is running on that port. Currently it responds with the name of the service: 'Alert Gateway' and the version of the service that is running. In future releases more information about the service, server or API may appear here.
 
 ## API Endpoint: '/alert'
-### POST MEHTOD
+### POST Method
 This endpoint responds to the POST method and expects a JSON format known to this application as an Alert JSON.
 
 Here is an example of the Alert JSON:
@@ -107,7 +107,7 @@ Here is what the Action Response JSON will look like:
 ## API Endpoint: '/alert/subscriptions'
 This endpoint is multifaceted in its capabilities. It can be used to query for existing subscriptions or it can be used to Add, Modify or Delete Subscriptions.
 
-### GET METHOD
+### GET Method
 When interacting with this endpoint using the GET METHOD one can query for existing subscriptions. The most basic type of query is to simply hit the endpoint with the basic GET METHOD request. The response to the query will be a JSON response which contains an Array/List of all known Subscriptions. Subscriptions use the Subscription JSON format.
 
 Here is an example of the Subscription JSON format:
@@ -126,6 +126,16 @@ Here is an example of the Subscription JSON format:
 | severityMask | A numeric value which acts as a mask for all of the Severity Levels the subscriber is interested in. |
 | id | This field is a unique identifier that the system has assigned to the subscription. |
 
-So, a little more on the severityMask field may be needed... The severityMask field is a number that can represent one or more Severity Levels. This is achieved by first raising 2 to the power of the Severity Level's value, and then performing a logical 'AND' on each of the calculated values so they are compiled together into a single numeric value. Below is an example...
+So, a little more on the severityMask field may be needed... The severityMask field is a number that can represent one or more Severity Levels. This is achieved by first raising 2 to the power of the Severity Level's value, and then adding each of the calculated values, the result is a single numeric value which is the 'severityMask'. Below is an example...
 
-Example for calculating the 'severityMask' for 
+Example for calculating the 'severityMask' for a subscription to TEST(1), INFORMATIONAL(2), and EMERGENCY(5) would be as follows:
+```
+TEST ....... : 2^1 = 2
+INFORMATIONAL: 2^2 = 4
+EMERGENCY .. : 2^5 = 32
+
+2 + 4 + 32 = 38 
+```
+
+Calculating the 'severityMask' this way allows for a Severity to be tested for a match against the 'severityMask' by simply performing a logical 'AND' between the two values, if the result is non-zero then it is a match.
+
