@@ -98,7 +98,7 @@ The GET method sent to this endpoint can also be supplied with one or more of th
 | email | The email address of the Subscriber to search for. |
 | sourceName | The 'sourceName' of the subscriptions to find. |
 
-Here is an example of a query that would pull back the subscriptions for the email address 'someone@email.com':
+Here is an example of a query that would pull back the subscriptions for the email address `someone@email.com`:
 
 `/alert/subscriptions?email=someone@email.com`
 
