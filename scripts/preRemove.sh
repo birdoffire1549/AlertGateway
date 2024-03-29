@@ -21,20 +21,12 @@ echo "Attempting to disable the alert-gateway service..."
 /usr/bin/systemctl disable alert-gateway 2>/dev/null
 echo "Complete."
 
-######################################
-## Remove the application's user... ##
-######################################
-check=0
-for x in $(awk -F":" '{ print $1 }' /etc/passwd ); do
-    if [ "$x" = "alert-gateway" ] ; then
-        check=1
-    fi
-done
-if [ $check -eq 1 ] ; then
-    echo "Removing the alert-gateway user..."
-    /usr/sbin/userdel -r alert-gateway 2>/dev/null
-    echo "Complete."
-fi
+######################
+## Reload systemctl ##
+######################
+echo "Reloading the systemctl daemon..."
+/usr/bin/systemctl daemon-reload
+echo "Complete."
 
 set -e 
 

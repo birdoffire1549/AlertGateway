@@ -18,4 +18,11 @@ if [ $check -eq 0 ] ; then
     echo "Complete."
 fi
 
+#####################################
+## Drop alert-gateway.install file ##
+#####################################
+echo "Dropping install-flag file incase upgrading service..."
+/usr/bin/touch /tmp/alert-gateway.install
+echo "Complete."
+
 echo "preInstall complete."

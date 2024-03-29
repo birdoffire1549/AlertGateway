@@ -88,6 +88,7 @@ task myDeb(dependsOn: build, type: Deb) {
     preInstall file('scripts/preInstall.sh')
     postInstall file('scripts/postInstall.sh')
     preUninstall file('scripts/preRemove.sh')
+    postUninstall file('scripts/postRemove.sh')
     
     requires('java-runtime-headless', '17', GREATER | EQUAL)
     
