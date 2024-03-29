@@ -43,7 +43,69 @@ The root path of the API will respond to a GET request with a HTML formatted tex
 
 ## API Endpoint: '/alert'
 ### POST Method
-This endpoint responds to the POST method and expects a JSON format known to this application as an Alert JSON.
+This endpoint responds to the POST method and expects a JSON format known to this application as an [Alert JSON](#alert-json).
+
+Keep in mind, that alerts are only sent out to subscribers who are subscribed to the particular 'sourceName' and 'severity'. That means the system can accept and drop alerts which have nowhere to be delivered.
+
+See below for more on how [Subscriptions](#api-endpoint:-'/alert/subscriptions') work.
+
+One of the fields in the Alert JSON is 'severity' and the value it stores should be one of the following Severity Levels...
+
+#### Severity Levels
+
+| Value | Severity | 
+| ---- | ---- |
+| 1 | TEST |
+| 2 | INFORMATIONAL |
+| 3 | WARNING |
+| 4 | CRITICAL |
+| 5 | EMERGENCY |
+
+#### Response
+When a POST is made to the '/alert' endpoint the response will be in the form of an [Action Response JSON](#action-response-json).
+
+The value returned for Response Type will be one of the following...
+
+##### Response Types
+
+| Value | Description | 
+| ---- | ---- |
+| 1 | ACTION_SUCCESSFUL | 
+| 2 | ACTION_FAILED |
+
+## API Endpoint: '/alert/subscriptions'
+This endpoint is multifaceted in its capabilities. It can be used to query for existing subscriptions or it can be used to Add, Modify or Delete Subscriptions.
+
+### GET Method
+When interacting with this endpoint using the GET METHOD one can query for existing subscriptions. The most basic type of query is to simply hit the endpoint with the basic GET METHOD request. The response to the query will be a JSON response which contains an Array/List of all known Subscriptions. Subscriptions use the [Subscription JSON](#subscription-json) format.
+
+So, a little more on the 'severityMask' field may be needed... The 'severityMask' field is a number that can represent one or more Severity Levels. This is achieved by first raising 2 to the power of the Severity Level's value, and then adding each of the calculated values together, the result is a single numeric value which is the 'severityMask'. Below is an example...
+
+Example for calculating the 'severityMask' for a subscription to TEST(1), INFORMATIONAL(2), and EMERGENCY(5) would be as follows:
+```
+TEST ....... : 2^1 = 2
+INFORMATIONAL: 2^2 = 4
+EMERGENCY .. : 2^5 = 32
+
+2 + 4 + 32 = 38 
+```
+
+Calculating the 'severityMask' this way allows for a Severity to be tested for a match against the 'severityMask' by simply performing a logical 'AND' between the two values, if the result is non-zero then it is a match.
+
+#### Using Parameters
+The GET method sent to this endpoint can also be supplied with one or more of the following parameters to help find a specific Subscription if it exists:
+
+| Parameter | Description |
+| ---- | ---- |
+| email | The email address of the Subscriber to search for. |
+| sourceName | The 'sourceName' of the subscriptions to find. |
+
+Here is an example of a query that would pull back the subscriptions for the email address 'someone@email.com':
+
+`/alert/subscriptions?email=someone@email.com`
+
+# API JSON Objects
+## Alert JSON
 
 Here is an example of the Alert JSON:
 ```
@@ -65,22 +127,7 @@ Here is an example of the Alert JSON:
 | severity | Numeric field corresponding to the severity level of the alert. More information on [Severity Levels](#severity-levels) below. |
 | message | A String field for the message that is intended to be sent to the subscriber. |
 
-Keep in mind, that alerts are only sent out to subscribers who are subscribed to the particular sourceName and severity. That means the system can accept and drop alerts which have nowhere to be delivered.
-
-See below for more on how [Subscriptions](#api-endpoint:-'/alert/subscriptions') work.
-
-#### Severity Levels
-
-| Value | Severity | 
-| ---- | ---- |
-| 1 | TEST |
-| 2 | INFORMATIONAL |
-| 3 | WARNING |
-| 4 | CRITICAL |
-| 5 | EMERGENCY |
-
-#### Response
-When a POST is made to the '/alert' endpoint the response will be in the form of an Action Response JSON.
+## Action Response JSON
 
 Here is what the Action Response JSON will look like:
 ```
@@ -97,18 +144,7 @@ Here is what the Action Response JSON will look like:
 | message | A String field that contains a short message about the result of the action. |
 | addInfo | A String that can sometime contain additional information. At times it could be details about the action that occurred or even a stack-trace that resulted from the action. |
 
-##### Response Types
-
-| Value | Description | 
-| ---- | ---- |
-| 1 | ACTION_SUCCESSFUL | 
-| 2 | ACTION_FAILED |
-
-## API Endpoint: '/alert/subscriptions'
-This endpoint is multifaceted in its capabilities. It can be used to query for existing subscriptions or it can be used to Add, Modify or Delete Subscriptions.
-
-### GET Method
-When interacting with this endpoint using the GET METHOD one can query for existing subscriptions. The most basic type of query is to simply hit the endpoint with the basic GET METHOD request. The response to the query will be a JSON response which contains an Array/List of all known Subscriptions. Subscriptions use the Subscription JSON format.
+## Subscription JSON
 
 Here is an example of the Subscription JSON format:
 ```
@@ -125,17 +161,3 @@ Here is an example of the Subscription JSON format:
 | sourceName | The sourceName the subscriber has subscribed to. |
 | severityMask | A numeric value which acts as a mask for all of the Severity Levels the subscriber is interested in. |
 | id | This field is a unique identifier that the system has assigned to the subscription. |
-
-So, a little more on the severityMask field may be needed... The severityMask field is a number that can represent one or more Severity Levels. This is achieved by first raising 2 to the power of the Severity Level's value, and then adding each of the calculated values, the result is a single numeric value which is the 'severityMask'. Below is an example...
-
-Example for calculating the 'severityMask' for a subscription to TEST(1), INFORMATIONAL(2), and EMERGENCY(5) would be as follows:
-```
-TEST ....... : 2^1 = 2
-INFORMATIONAL: 2^2 = 4
-EMERGENCY .. : 2^5 = 32
-
-2 + 4 + 32 = 38 
-```
-
-Calculating the 'severityMask' this way allows for a Severity to be tested for a match against the 'severityMask' by simply performing a logical 'AND' between the two values, if the result is non-zero then it is a match.
-
