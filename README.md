@@ -33,7 +33,7 @@ The application will generate logs in the '/opt/alert_gateway/logs' directory un
 
 | Endpoint | Method | Description | 
 | ---- | ---- | ---- |
-| / | GET | Information page for the service |
+| / | GET | HTML Information page for the service |
 | /alert | POST | Used to send an alert |
 | /alert/subscriptions | GET | Used to query subscriptions |
 | /alert/subscriptions | POST | Used to Create/Modify/Delete subscriptions |
@@ -45,9 +45,7 @@ The root path of the API will respond to a GET request with a HTML formatted tex
 ### POST Method
 This endpoint responds to the POST method and expects a JSON format known to this application as an [Alert JSON](#alert-json).
 
-Keep in mind, that alerts are only sent out to subscribers who are subscribed to the particular 'sourceName' and 'severity'. That means the system can accept and drop alerts which have nowhere to be delivered.
-
-See below for more on how [Subscriptions](#api-endpoint:-'/alert/subscriptions') work.
+When sending alerts it is good to keep in mind, that alerts are only sent out to subscribers who are subscribed to the particular 'sourceName' and 'severity'. That means the system will accept and drop alerts which have nowhere to be delivered.
 
 One of the fields in the Alert JSON is 'severity' and the value it stores should be one of the following Severity Levels...
 
@@ -103,6 +101,9 @@ The GET method sent to this endpoint can also be supplied with one or more of th
 Here is an example of a query that would pull back the subscriptions for the email address 'someone@email.com':
 
 `/alert/subscriptions?email=someone@email.com`
+
+### Response
+A query of this endpoint will result in a JSON response where all matching Subscriptions will be returned as a JSON List/Array of [Subscription JSON](#subscription-json).
 
 # API JSON Objects
 ## Alert JSON
