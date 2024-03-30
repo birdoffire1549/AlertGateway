@@ -104,18 +104,36 @@ task myDeb(dependsOn: build, type: Deb) {
     }
     
     from('src/main/resources') {
-        fileType CONFIG | NOREPLACE
         exclude 'version.properties'
         exclude 'log4j.properties'
-        into '/opt/alert_gateway/config'
+        
+        // Sick of broken crappy plugins, and the equally
+        // crapy workarounds that never actually work!!!
+        // Leaving below for future reference:
+        // ------------------------------------
+        fileType CONFIG | NOREPLACE // Should work but doesn't.
+        // fileType CONFIG.set(NOREPLACE.flag()) // Suggested online but doesn't work.
+        // fileType=CONFIG // Seemed like this might work but didn't
+        // ----
+        // Below worked for someone else online but not me. 
+        // Maybe using wrong but who knows because no one ever shows 
+        // how they actually use something instead they just throw it
+        // out there like everone should know how and were to use it just
+        // by the sheer fact it exists!
+        // ----
+        // configurationFile("/opt/config/application.properties")
+          
         fileMode 0440
+        
+        into '/opt/alert_gateway/config'
     }
     
     from('scripts/alert-gateway.service') {
         addParentDirs = false
-        into '/usr/lib/systemd/system'
         user 'root'
         fileMode 0644
+        
+        into '/usr/lib/systemd/system'
     }
 }
 
