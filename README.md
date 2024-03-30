@@ -12,7 +12,8 @@ This service uses SpringBoot to publish various REST endpoints. Communication wi
 This service can be installed on a Debian based linux box by using the 'deb' file which can be downloaded from one of the Releases here:
 https://github.com/birdoffire1549/AlertGateway/releases
 
-**NOTE:** There is also a RPM available for download and install but I haven't tested it yet.
+> [!NOTE] 
+> There is also a RPM available for download and install but I haven't tested it yet.
 
 Once downloaded and transfered to your linux host, you can install it by using the following command:
 `sudo dpkg -i ./packageName.deb`
