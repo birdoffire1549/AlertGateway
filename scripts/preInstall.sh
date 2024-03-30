@@ -25,4 +25,12 @@ echo "Dropping install-flag file incase upgrading service..."
 /usr/bin/touch /tmp/alert-gateway.install
 echo "Complete."
 
+##################################
+## Move property file to safety ##
+##################################
+if /usr/bin/test -f /opt/alert_gateway/config/application.properties; then
+    echo "Moving the application.properties file to preserve it..."
+    /usr/bin/cp /opt/alert_gateway/config/application.properties /tmp/alert-gateway.properties
+    echo "Complete."
+fi
 echo "preInstall complete."

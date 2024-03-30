@@ -4,6 +4,15 @@ echo "Running: postInstall..."
 
 set +e
 
+#############################
+## Restore Properties File ##
+#############################
+if /usr/bin/test -f /tmp/alert-gateway.properties; then
+    echo "Restoring the preserved application property file..."
+    /usr/bin/mv /tmp/alert-gateway.properties /opt/alert_gateway/config/application.properties
+    echo "Complete."
+fi
+
 ####################################################################
 ## Modify ownership of the application's directories and files... ##
 ####################################################################

@@ -111,7 +111,7 @@ task myDeb(dependsOn: build, type: Deb) {
         // crapy workarounds that never actually work!!!
         // Leaving below for future reference:
         // ------------------------------------
-        fileType CONFIG | NOREPLACE // Should work but doesn't.
+        // fileType CONFIG | NOREPLACE // Should work but doesn't.
         // fileType CONFIG.set(NOREPLACE.flag()) // Suggested online but doesn't work.
         // fileType=CONFIG // Seemed like this might work but didn't
         // ----
