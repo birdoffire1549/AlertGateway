@@ -34,11 +34,21 @@ echo "Enabling the alert-gateway service..."
 /usr/bin/systemctl enable alert-gateway
 echo "Complete."
 
-##################################
-## Remove the install-flag file ##
-##################################
-echo "Removing the install-flag file..."
+########################################
+## Start service if was running prior ##
+########################################
+echo "Starting the alert-gateway service..."
+if /usr/bin/test -f /tmp/alert-gateway.start; then
+    /usr/bin/systemctl start alert-gateway
+fi
+echo "Complete."
+
+###########################
+## Remove the flag files ##
+###########################
+echo "Removing flag files..."
 /usr/bin/rm -f /tmp/alert-gateway.install
+/usr/bin/rm -f /tmp/alert-gateway.start
 echo "Complete."
 
 set -e

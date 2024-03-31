@@ -7,9 +7,12 @@ set +e
 #######################################
 ## Stop the alert-gateway service... ##
 #######################################
-x=$(ps -ef | grep alert-gateway | grep -v grep | wc -l)
+x=$(ps -ef | grep "/usr/bin/java -jar /opt/alert_gateway/alert-gateway.jar" | grep -v grep | wc -l)
 if [ $x -gt 0 ] ; then
     echo "Attempting to stop the alert-gateway service..."
+    if /usr/bin/test -f /tmp/alert-gateway.install; then
+        /usr/bin/touch /tmp/alert-gateway.start
+    fi
     /usr/bin/systemctl stop alert-gateway
     echo "Complete."
 fi
